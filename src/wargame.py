@@ -111,7 +111,7 @@ class WarGame:
     WAR_NUMBER_OF_CARDS = 3
     MAIN_SEPARATOR = "====================================================="
     SUB_SEPARATOR = "-----------------------------------------------------"
-    MAX_ROUNDS = 1000
+    MAX_ROUNDS = 10000
 
     def __init__(self):
         print(self.MAIN_SEPARATOR)
@@ -136,6 +136,20 @@ class WarGame:
         # Variable to store the number of rounds
         self.__rounds = 0
 
+    def __draw_player1_cards(self, number_of_cards):
+        try:
+            return self.__player1.draw_cards(number_of_cards)
+        except NoCardsRemaining:
+            print("\nPlayer 1 has no cards left. PLAYER 2 WINS THE GAME")
+            exit(0)
+
+    def __draw_player2_cards(self, number_of_cards):
+        try:
+            return self.__player2.draw_cards(number_of_cards)
+        except NoCardsRemaining:
+            print("\nPlayer 2 has no cards left. PLAYER 1 WINS THE GAME")
+            exit(0)
+
     def play(self):
         """This is each round of the Game"""
 
@@ -147,68 +161,55 @@ class WarGame:
                              format(self.MAX_ROUNDS))
 
         # If number of rounds is greater than MAX_ROUNDS
+        print("\n")
+        print(self.MAIN_SEPARATOR)
+        print("Round {}".format(self.__rounds))
         print(self.MAIN_SEPARATOR)
         if not self.__player1.number_of_cards():
-            print("PLAYER 2 WINS THE GAME")
+            print("\nPlayer 1 has no cards left. PLAYER 2 WINS THE GAME")
             exit(0)
         elif not self.__player2.number_of_cards():
-            print("PLAYER 1 WINS THE GAME")
+            print("\nPlayer 2 has no cards left. PLAYER 1 WINS THE GAME")
             exit(0)
 
-        # If war is ON, draw WAR_NUMBER_OF_CARDS cards from each player
+        # If war is ON, draw WAR_NUMBER_OF_CARDS cards from each player and add to table
         if self.__war:
-            try:
-                player1_cards = self.__player1.draw_cards(self.WAR_NUMBER_OF_CARDS)
-                self.__table.extend(player1_cards)
-            except NoCardsRemaining:
-                print("Player 1 has no cards left.\nPLAYER 2 WINS THE GAME")
-                exit(0)
+            player1_cards = self.__draw_player1_cards(self.WAR_NUMBER_OF_CARDS)
+            self.__table.extend(player1_cards)
 
-            try:
-                player2_cards = self.__player2.draw_cards(self.WAR_NUMBER_OF_CARDS)
-                self.__table.extend(player2_cards)
-            except NoCardsRemaining:
-                print("Player 2 has no cards left.\nPLAYER 1 WINS THE GAME")
-                exit(0)
+            player2_cards = self.__draw_player2_cards(self.WAR_NUMBER_OF_CARDS)
+            self.__table.extend(player2_cards)
             self.__print_table_cards()
 
         # Get the next card from each player
-        player1_card = None
-        player2_card = None
-        try:
-            player1_card = self.__player1.draw_cards(1)[0]
-            print("Player 1: {}".format(player1_card))
-        except NoCardsRemaining:
-            print("Player 1 has no cards left.\nPLAYER 2 WINS THE GAME")
-            exit(0)
+        player1_card = self.__draw_player1_cards(1)[0]
+        player2_card = self.__draw_player2_cards(1)[0]
 
-        try:
-            player2_card = self.__player2.draw_cards(1)[0]
-            print("Player 2: {}".format(player2_card))
-        except NoCardsRemaining:
-            print("Player 2 has no cards left.\nPLAYER 1 WINS THE GAME")
-            exit(0)
+        print("Player 1: {}".format(player1_card))
+        print("Player 2: {}".format(player2_card))
 
         if player1_card.getValue() == player2_card.getValue():
             # If both the cards have equal value, then add both cards to the table and declare war
             self.__table.append(player1_card)
             self.__table.append(player2_card)
             self.__war = True
-            print("WARRRRRRRRRRRRRR")
+            print("\nWARRRRRRRRRRRRRR")
         elif player1_card.getValue() > player2_card.getValue():
             # Player 1 keeps all the cards since Player 1 card's value is greater than that of Player 2
             self.__player1.add_cards([player1_card, player2_card])
             self.__player1.add_cards(self.__table)
             self.__table = []
             self.__war = False
-            print("Player 1 Wins this round")
+            print("\nPlayer 1 Wins this round")
         else:
+            # Player 2 keeps all the cards since Player 2 card's value is greater than that of Player 1
             self.__player2.add_cards([player1_card, player2_card])
             self.__player2.add_cards(self.__table)
             self.__table = []
             self.__war = False
-            print("Player 2 Wins this round")
+            print("\nPlayer 2 Wins this round")
 
+        print("Players' cards at the end of the round:")
         self.__print_players_cards()
         print(self.MAIN_SEPARATOR)
 

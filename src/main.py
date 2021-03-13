@@ -8,8 +8,9 @@ def play_war_game():
     print("Instructions:")
     print("Press P to play one round, F to complete the full game, E to exit\n")
     possible_inputs = ["P", "E", "F"]
+
     while True:
-        user_input = input("Enter P, E or F:")
+        user_input = input("\nEnter P, E or F:")
         if user_input not in possible_inputs:
             print("Invalid input. Try again.")
             continue
