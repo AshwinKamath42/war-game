@@ -111,6 +111,7 @@ class WarGame:
     WAR_NUMBER_OF_CARDS = 3
     MAIN_SEPARATOR = "====================================================="
     SUB_SEPARATOR = "-----------------------------------------------------"
+    MAX_ROUNDS = 1000
 
     def __init__(self):
         print(self.MAIN_SEPARATOR)
@@ -132,7 +133,20 @@ class WarGame:
         # Stores the cards on the table
         self.__table = []
 
+        # Variable to store the number of rounds
+        self.__rounds = 0
+
     def play(self):
+        """This is each round of the Game"""
+
+        # Increase the number of rounds by 1
+        self.__rounds += 1
+
+        if self.__rounds > self.MAX_ROUNDS:
+            raise SystemExit("Number of rounds exceeded maximum - {}. GAME ENDS IN A DRAW".
+                             format(self.MAX_ROUNDS))
+
+        # If number of rounds is greater than MAX_ROUNDS
         print(self.MAIN_SEPARATOR)
         if not self.__player1.number_of_cards():
             print("PLAYER 2 WINS THE GAME")

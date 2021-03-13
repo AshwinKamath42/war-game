@@ -3,6 +3,7 @@ from wargame import WarGame
 
 
 def play_war_game():
+    """Command Line Interface for the War Game"""
     game = WarGame()
     print("Instructions:")
     print("Press P to play one round, F to complete the full game, E to exit\n")
