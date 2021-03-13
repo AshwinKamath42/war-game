@@ -42,7 +42,7 @@ class Card:
         """This method gets called when print() is called on a Card"""
         return "{} {}  ".format(self.__suit, self.__value)
 
-    def getValue(self):
+    def get_value(self):
         return self.__value
 
 
@@ -61,7 +61,7 @@ class Deck:
             print(card, end=" ")
         print()
 
-    def shuffleAndDivide(self):
+    def shuffle_and_divide(self):
         """Shuffles the cards in the deck and divides it into two parts"""
         random.shuffle(self.__cards)
         # Divide the cards in the deck into two parts
@@ -121,7 +121,7 @@ class WarGame:
         self.__deck = Deck()
 
         # Shuffle the deck and divide it into two parts
-        player1_cards, player2_cards = self.__deck.shuffleAndDivide()
+        player1_cards, player2_cards = self.__deck.shuffle_and_divide()
 
         # Create two players with the two parts created
         self.__player1 = Player(player1_cards)
@@ -188,13 +188,13 @@ class WarGame:
         print("Player 1: {}".format(player1_card))
         print("Player 2: {}".format(player2_card))
 
-        if player1_card.getValue() == player2_card.getValue():
+        if player1_card.get_value() == player2_card.get_value():
             # If both the cards have equal value, then add both cards to the table and declare war
             self.__table.append(player1_card)
             self.__table.append(player2_card)
             self.__war = True
             print("\nWARRRRRRRRRRRRRR")
-        elif player1_card.getValue() > player2_card.getValue():
+        elif player1_card.get_value() > player2_card.get_value():
             # Player 1 keeps all the cards since Player 1 card's value is greater than that of Player 2
             self.__player1.add_cards([player1_card, player2_card])
             self.__player1.add_cards(self.__table)
